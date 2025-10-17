@@ -15,10 +15,13 @@
    - **Build Command**: (Render will automatically use your Dockerfile)
    - **Start Command**: (Render will automatically use your Dockerfile)
 
-4. **Environment Variables** (optional):
+4. **Environment Variables** (required for CORS):
    ```
+   FRONTEND_URL=https://your-frontend-domain.vercel.app
    PYTHON_VERSION=3.11
    ```
+   
+   **⚠️ CRITICAL**: Set `FRONTEND_URL` to your deployed Vercel frontend URL to fix CORS issues.
 
 5. **Deploy**: Click "Create Web Service" and wait for deployment
 
@@ -108,17 +111,16 @@ setAnalysisData(data)
 
 ### Backend Security Updates
 
-In `backend/main.py`, update CORS for production:
+**For existing deployments, update the CORS configuration:**
 
-```python
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["https://your-frontend-domain.vercel.app"],  # Your Vercel URL
-    allow_credentials=True,
-    allow_methods=["GET"],
-    allow_headers=["*"],
-)
-```
+1. **Go to Render Dashboard** → Your backend service → **Settings**
+2. **Add Environment Variable**:
+   ```
+   FRONTEND_URL=https://your-frontend-domain.vercel.app
+   ```
+3. **Redeploy** the service
+
+**The backend now automatically reads the frontend URL from environment variables for secure CORS configuration.**
 
 ## 📊 Monitoring and Maintenance
 

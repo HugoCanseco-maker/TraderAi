@@ -13,12 +13,16 @@ warnings.filterwarnings('ignore')
 
 app = FastAPI(title="TraderBlockAI API", version="1.0.0")
 
-# Enable CORS for frontend
+# Get the frontend URL from an environment variable for flexibility
+# Fallback to localhost for local development
+frontend_url = os.environ.get("FRONTEND_URL", "http://localhost:3000")
+
+# Enable CORS for frontend with production-ready security
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Configure appropriately for production
+    allow_origins=[frontend_url],  # This is the crucial security change
     allow_credentials=True,
-    allow_methods=["*"],
+    allow_methods=["GET"], # Only allow GET requests for security
     allow_headers=["*"],
 )
 

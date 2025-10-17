@@ -101,8 +101,9 @@ TraderAi/
 
 ### Environment Variables
 
-**Backend** (optional):
-- No environment variables required for basic functionality
+**Backend** (required for production):
+- `FRONTEND_URL`: Your deployed frontend URL (e.g., https://your-app.vercel.app)
+- Used for secure CORS configuration
 
 **Frontend** (optional):
 - `NEXT_PUBLIC_API_URL`: Backend API URL (defaults to https://traderai-r9iz.onrender.com)
