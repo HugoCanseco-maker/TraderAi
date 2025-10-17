@@ -44,42 +44,20 @@ export default function Home() {
     setError(null)
     
     try {
-      // In production, this would be your deployed backend URL
-      // For now, we'll use a mock response to demonstrate the UI
-      const mockResponse = {
-        ticker: ticker,
-        current_price: 150.25 + Math.random() * 50,
-        trend: ['Bullish', 'Bearish', 'Neutral'][Math.floor(Math.random() * 3)],
-        momentum: ['Overbought', 'Oversold', 'Positive', 'Negative'][Math.floor(Math.random() * 4)],
-        volatility: ['High', 'Medium', 'Low'][Math.floor(Math.random() * 3)],
-        confidence: 0.75 + Math.random() * 0.2,
-        forecast: {
-          day_1: 150.25 + Math.random() * 50 + (Math.random() - 0.5) * 10,
-          day_2: 150.25 + Math.random() * 50 + (Math.random() - 0.5) * 15,
-          day_3: 150.25 + Math.random() * 50 + (Math.random() - 0.5) * 20,
-        },
-        sma_20: 145.50 + Math.random() * 20,
-        sma_50: 140.75 + Math.random() * 30,
-        rsi: 30 + Math.random() * 40,
-        macd: (Math.random() - 0.5) * 2,
-        // --- NEW PROFESSIONAL-GRADE METRICS ---
-        extreme_risk: {
-          var_99_percent: -0.05 - Math.random() * 0.03, // -5% to -8% range
-          max_expected_loss_usd: -(150.25 + Math.random() * 50) * (0.05 + Math.random() * 0.03)
-        },
-        risk_adjusted_return: {
-          sharpe_ratio: 0.5 + Math.random() * 1.5 // 0.5 to 2.0 range
-        },
-        market_correlation: {
-          beta: 0.5 + Math.random() * 1.5 // 0.5 to 2.0 range
-        },
-        // -------------------------------------
-        educational_explanation: `The stock ${ticker} shows interesting patterns in its recent trading activity. The technical indicators suggest various market conditions that investors should consider when making decisions. This analysis combines traditional technical analysis with AI-powered insights to provide a comprehensive view of the stock's potential direction. Remember that past performance does not guarantee future results, and all investments carry risk.`
+      // Call the live backend API
+      const response = await fetch(`https://traderai-r9iz.onrender.com/api/v1/analyze/${ticker}`)
+      if (!response.ok) {
+        throw new Error(`Failed to analyze ${ticker}: ${response.statusText}`)
       }
-
-      // Generate mock chart data
+      const data = await response.json()
+      
+      // Set the real analysis data
+      setAnalysisData(data)
+      
+      // Generate chart data based on real analysis (simplified for demo)
+      // In a real implementation, you'd get historical data from the backend
       const mockChartData: ChartData[] = []
-      const basePrice = mockResponse.current_price
+      const basePrice = data.current_price
       const currentDate = new Date()
       
       for (let i = 29; i >= 0; i--) {
@@ -92,26 +70,12 @@ export default function Home() {
         mockChartData.push({
           date: date.toISOString().split('T')[0],
           price: Math.max(price, 1), // Ensure positive price
-          sma20: basePrice + (Math.random() - 0.5) * 8,
-          sma50: basePrice + (Math.random() - 0.5) * 12,
+          sma20: data.sma_20 + (Math.random() - 0.5) * 8,
+          sma50: data.sma_50 + (Math.random() - 0.5) * 12,
         })
       }
-
-      // Simulate API delay
-      await new Promise(resolve => setTimeout(resolve, 1500))
       
-      setAnalysisData(mockResponse)
       setChartData(mockChartData)
-      
-      // Uncomment the following lines when you have your backend deployed:
-      /*
-      const response = await fetch(`https://your-backend-url.com/api/v1/analyze/${ticker}`)
-      if (!response.ok) {
-        throw new Error(`Failed to analyze ${ticker}`)
-      }
-      const data = await response.json()
-      setAnalysisData(data)
-      */
       
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred')

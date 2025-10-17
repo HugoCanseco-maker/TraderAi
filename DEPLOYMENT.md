@@ -9,11 +9,11 @@
 2. **Connect your GitHub repository** to Render
 
 3. **Create a new Web Service**:
-   - **Name**: `traderblockai-backend`
-   - **Environment**: `Python 3`
-   - **Build Command**: `pip install -r requirements.txt`
-   - **Start Command**: `uvicorn main:app --host 0.0.0.0 --port $PORT`
-   - **Root Directory**: `backend`
+   - **Name**: `traderblockai-api`
+   - **Environment**: `Docker` *(Crucial: This tells Render to use our Dockerfile)*
+   - **Root Directory**: `backend` *(This is the critical fix for the error)*
+   - **Build Command**: (Render will automatically use your Dockerfile)
+   - **Start Command**: (Render will automatically use your Dockerfile)
 
 4. **Environment Variables** (optional):
    ```
@@ -27,7 +27,7 @@
 ### Step 2: Test Backend API
 
 ```bash
-curl https://your-backend-url.onrender.com/api/v1/analyze/AAPL
+curl https://traderai-r9iz.onrender.com/api/v1/analyze/AAPL
 ```
 
 ## 🌐 Frontend Deployment (Vercel)
@@ -46,7 +46,7 @@ curl https://your-backend-url.onrender.com/api/v1/analyze/AAPL
 
 4. **Environment Variables**:
    ```
-   NEXT_PUBLIC_API_URL=https://your-backend-url.onrender.com
+   NEXT_PUBLIC_API_URL=https://traderai-r9iz.onrender.com
    ```
 
 5. **Deploy**: Click "Deploy" and wait for deployment

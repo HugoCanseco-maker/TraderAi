@@ -105,7 +105,7 @@ TraderAi/
 - No environment variables required for basic functionality
 
 **Frontend** (optional):
-- `NEXT_PUBLIC_API_URL`: Backend API URL (defaults to localhost:8000)
+- `NEXT_PUBLIC_API_URL`: Backend API URL (defaults to https://traderai-r9iz.onrender.com)
 
 ### API Endpoints
 
@@ -119,9 +119,10 @@ TraderAi/
 1. Connect your GitHub repository to Render
 2. Create a new Web Service
 3. Configure:
-   - **Build Command**: `pip install -r requirements.txt`
-   - **Start Command**: `uvicorn main:app --host 0.0.0.0 --port $PORT`
-   - **Environment**: Python 3.11
+   - **Environment**: `Docker` (Crucial: This tells Render to use our Dockerfile)
+   - **Root Directory**: `backend` (This is the critical fix for the error)
+   - **Build Command**: (Render will automatically use your Dockerfile)
+   - **Start Command**: (Render will automatically use your Dockerfile)
 
 ### Frontend to Vercel
 
