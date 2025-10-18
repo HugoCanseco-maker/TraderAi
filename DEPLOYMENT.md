@@ -15,13 +15,17 @@
    - **Build Command**: (Render will automatically use your Dockerfile)
    - **Start Command**: (Render will automatically use your Dockerfile)
 
-4. **Environment Variables** (required for CORS):
+4. **Environment Variables** (required):
    ```
    FRONTEND_URL=https://your-frontend-domain.vercel.app
+   APCA_API_KEY_ID=your_alpaca_api_key
+   APCA_API_SECRET_KEY=your_alpaca_secret_key
    PYTHON_VERSION=3.11
    ```
    
-   **⚠️ CRITICAL**: Set `FRONTEND_URL` to your deployed Vercel frontend URL to fix CORS issues.
+   **⚠️ CRITICAL**: 
+   - Set `FRONTEND_URL` to your deployed Vercel frontend URL to fix CORS issues
+   - Set `APCA_API_KEY_ID` and `APCA_API_SECRET_KEY` for Alpaca Market Data API access
 
 5. **Deploy**: Click "Create Web Service" and wait for deployment
 

@@ -2,6 +2,7 @@ import os
 import pandas as pd
 import numpy as np
 import yfinance as yf
+import alpaca_trade_api as tradeapi
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
@@ -75,15 +76,37 @@ class StockAnalyzer:
         self.model = model
     
     def get_stock_data(self, ticker: str, period: str = "1y") -> pd.DataFrame:
-        """Fetch stock data using yfinance"""
+        """Fetch stock data using the Alpaca Market Data API"""
         try:
-            stock = yf.Ticker(ticker)
-            data = stock.history(period=period)
+            # The Alpaca library automatically reads the API keys (APCA_API_KEY_ID
+            # and APCA_API_SECRET_KEY) from the environment variables we set on Render.
+            api = tradeapi.REST()
+            
+            # Determine the correct date range for the data fetch
+            end_date = pd.Timestamp.now(tz='America/New_York')
+            if period == "1y":
+                start_date = end_date - pd.Timedelta(days=365)
+            else: # A safe fallback for other periods like calculating beta
+                 start_date = end_date - pd.Timedelta(days=500)
+
+            # Fetch the historical data (called "bars") from Alpaca's API
+            data = api.get_bars(
+                ticker,
+                tradeapi.TimeFrame.Day,
+                start=start_date.isoformat(),
+                end=end_date.isoformat()
+            ).df
+
             if data.empty:
-                raise ValueError(f"No data found for ticker {ticker}")
+                raise ValueError(f"No data found for ticker {ticker} from Alpaca. The ticker may be invalid or delisted.")
+            
+            # Standardize the column name from 'close' (Alpaca's format) to 'Close' (our app's format)
+            data.rename(columns={'close': 'Close'}, inplace=True)
             return data
+            
         except Exception as e:
-            raise ValueError(f"Error fetching data for {ticker}: {str(e)}")
+            # This will catch any errors from Alpaca, like an invalid API key or ticker
+            raise ValueError(f"Error fetching data for {ticker} from Alpaca: {str(e)}")
     
     def calculate_technical_indicators(self, data: pd.DataFrame) -> Dict[str, float]:
         """Calculate technical indicators"""

@@ -17,7 +17,7 @@ An AI-powered stock analysis dashboard that educates novice investors by blendin
 ### Backend (Python + FastAPI)
 - **Framework**: FastAPI
 - **AI Model**: LSTM neural network for price forecasting
-- **Data Source**: Yahoo Finance API (yfinance)
+- **Data Source**: Alpaca Market Data API (professional-grade)
 - **Technical Analysis**: Custom implementation of SMA, RSI, MACD
 - **Deployment**: Render
 
@@ -103,7 +103,9 @@ TraderAi/
 
 **Backend** (required for production):
 - `FRONTEND_URL`: Your deployed frontend URL (e.g., https://your-app.vercel.app)
-- Used for secure CORS configuration
+- `APCA_API_KEY_ID`: Alpaca Market Data API key
+- `APCA_API_SECRET_KEY`: Alpaca Market Data API secret
+- Used for secure CORS configuration and professional market data
 
 **Frontend** (optional):
 - `NEXT_PUBLIC_API_URL`: Backend API URL (defaults to https://traderai-r9iz.onrender.com)
