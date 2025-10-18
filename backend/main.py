@@ -80,7 +80,7 @@ class StockAnalyzer:
         try:
             # The Alpaca library automatically reads the API keys (APCA_API_KEY_ID
             # and APCA_API_SECRET_KEY) from the environment variables we set on Render.
-            api = tradeapi.REST()
+            api = tradeapi.REST(data_url='https://data.alpaca.markets')
             
             # Determine the correct date range for the data fetch
             end_date = pd.Timestamp.now(tz='America/New_York')
