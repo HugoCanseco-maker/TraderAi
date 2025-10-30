@@ -14,6 +14,14 @@ warnings.filterwarnings('ignore')
 
 app = FastAPI(title="TraderBlockAI API", version="1.0.0")
 
+# Include new modular API routes
+try:
+    from api.routes import router as api_router  # type: ignore
+    app.include_router(api_router)
+except Exception:
+    # Keep legacy-only if modular router not available
+    pass
+
 # Get the frontend URL from an environment variable for flexibility
 # Fallback to localhost for local development
 frontend_url = os.environ.get("FRONTEND_URL", "http://localhost:3000")
